@@ -9,20 +9,20 @@ from typing import Literal, Optional
 import httpx
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException, Depends, Request
-from fastapi.responses import FileResponse
-from fastapi.security import HTTPBearer
+from fastapi.responses import FileResponse, JSONResponse
 from itsdangerous import URLSafeTimedSerializer, BadSignature, SignatureExpired
 from pydantic import BaseModel, Field
 
-# --------------------------------------------------
+
+# ==================================================
 # НАСТРОЙКИ
-# --------------------------------------------------
+# ==================================================
 
 BASE_DIR = Path(__file__).resolve().parent
 load_dotenv(BASE_DIR / ".env")
 
-BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN", "8983760334:AAGktyGzDaAicC9RsacmAP4xgV0yxkhVGl4").strip()
-CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "-5322734246").strip()
+BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN", "").strip()
+CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "").strip()
 
 SUPABASE_URL = os.getenv("SUPABASE_URL", "").strip().rstrip("/")
 SUPABASE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY", "").strip()
@@ -32,14 +32,17 @@ ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "").strip()
 SECRET_KEY = os.getenv("SECRET_KEY", "").strip()
 
 COOKIE_NAME = "suma_admin_session"
-serializer = URLSafeTimedSerializer(SECRET_KEY or "temporary-local-secret")
+
+serializer = URLSafeTimedSerializer(
+    SECRET_KEY or "temporary-local-secret"
+)
 
 app = FastAPI(title="SUMA BAKERY")
 
 
-# --------------------------------------------------
+# ==================================================
 # МОДЕЛИ
-# --------------------------------------------------
+# ==================================================
 
 class OrderItem(BaseModel):
     product_id: int
@@ -71,8 +74,8 @@ class ProductCreate(BaseModel):
 
 
 class ProductUpdate(BaseModel):
-    name_ru: Optional[str] = None
-    name_uz: Optional[str] = None
+    name_ru: Optional[str] = Field(default=None, min_length=1, max_length=120)
+    name_uz: Optional[str] = Field(default=None, min_length=1, max_length=120)
     price: Optional[int] = Field(default=None, gt=0)
     image_url: Optional[str] = None
     description_ru: Optional[str] = None
@@ -81,11 +84,12 @@ class ProductUpdate(BaseModel):
     active: Optional[bool] = None
 
 
-# --------------------------------------------------
+# ==================================================
 # SUPABASE
-# --------------------------------------------------
+# ==================================================
 
 async def supabase_request(method: str, table: str, **kwargs):
+
     if not SUPABASE_URL or not SUPABASE_KEY:
         raise HTTPException(
             status_code=503,
@@ -100,8 +104,7 @@ async def supabase_request(method: str, table: str, **kwargs):
         "Content-Type": "application/json",
     }
 
-    extra_headers = kwargs.pop("headers", {})
-    headers.update(extra_headers)
+    headers.update(kwargs.pop("headers", {}))
 
     try:
         async with httpx.AsyncClient(timeout=25) as client:
@@ -113,7 +116,12 @@ async def supabase_request(method: str, table: str, **kwargs):
             )
 
         if not response.is_success:
-            print("SUPABASE ERROR:", response.status_code, response.text)
+            print(
+                "SUPABASE ERROR:",
+                response.status_code,
+                response.text
+            )
+
             raise HTTPException(
                 status_code=502,
                 detail="Ошибка при обращении к базе данных."
@@ -131,11 +139,12 @@ async def supabase_request(method: str, table: str, **kwargs):
         )
 
 
-# --------------------------------------------------
-# АВТОРИЗАЦИЯ АДМИНИСТРАТОРА
-# --------------------------------------------------
+# ==================================================
+# АВТОРИЗАЦИЯ
+# ==================================================
 
 def require_admin(request: Request):
+
     if not ADMIN_USERNAME or not ADMIN_PASSWORD or not SECRET_KEY:
         raise HTTPException(
             status_code=503,
@@ -145,23 +154,35 @@ def require_admin(request: Request):
     token = request.cookies.get(COOKIE_NAME)
 
     if not token:
-        raise HTTPException(status_code=401, detail="Нужен вход.")
+        raise HTTPException(
+            status_code=401,
+            detail="Нужен вход."
+        )
 
     try:
-        username = serializer.loads(token, max_age=60 * 60 * 24)
+        username = serializer.loads(
+            token,
+            max_age=60 * 60 * 24
+        )
 
         if username != ADMIN_USERNAME:
-            raise HTTPException(status_code=401, detail="Нет доступа.")
+            raise HTTPException(
+                status_code=401,
+                detail="Нет доступа."
+            )
 
         return username
 
     except (BadSignature, SignatureExpired):
-        raise HTTPException(status_code=401, detail="Сессия закончилась.")
+        raise HTTPException(
+            status_code=401,
+            detail="Сессия закончилась."
+        )
 
 
-# --------------------------------------------------
+# ==================================================
 # СТРАНИЦЫ
-# --------------------------------------------------
+# ==================================================
 
 @app.get("/")
 async def home():
@@ -173,12 +194,13 @@ async def admin_page():
     return FileResponse(BASE_DIR / "admin.html")
 
 
-# --------------------------------------------------
+# ==================================================
 # ПУБЛИЧНЫЙ КАТАЛОГ
-# --------------------------------------------------
+# ==================================================
 
 @app.get("/api/products")
 async def get_products():
+
     products = await supabase_request(
         "GET",
         "products",
@@ -188,37 +210,46 @@ async def get_products():
             "order": "id.asc"
         }
     )
+
     return {"products": products or []}
 
 
-# --------------------------------------------------
+# ==================================================
 # ВХОД И ВЫХОД
-# --------------------------------------------------
+# ==================================================
 
 @app.post("/api/admin/login")
-async def admin_login(data: LoginRequest, request: Request):
+async def admin_login(data: LoginRequest):
+
     if not ADMIN_USERNAME or not ADMIN_PASSWORD or not SECRET_KEY:
         raise HTTPException(
             status_code=503,
-            detail="Сначала настрой ADMIN_USERNAME, ADMIN_PASSWORD и SECRET_KEY."
+            detail="Настрой ADMIN_USERNAME, ADMIN_PASSWORD и SECRET_KEY."
         )
 
-    username_ok = hmac.compare_digest(data.username, ADMIN_USERNAME)
-    password_ok = hmac.compare_digest(data.password, ADMIN_PASSWORD)
+    username_ok = hmac.compare_digest(
+        data.username,
+        ADMIN_USERNAME
+    )
+
+    password_ok = hmac.compare_digest(
+        data.password,
+        ADMIN_PASSWORD
+    )
 
     if not username_ok or not password_ok:
-        raise HTTPException(status_code=401, detail="Неверный логин или пароль.")
+        raise HTTPException(
+            status_code=401,
+            detail="Неверный логин или пароль."
+        )
 
     token = serializer.dumps(ADMIN_USERNAME)
 
-    response = {
+    result = JSONResponse({
         "ok": True,
         "message": "Вход выполнен."
-    }
+    })
 
-    from fastapi.responses import JSONResponse
-
-    result = JSONResponse(response)
     result.set_cookie(
         key=COOKIE_NAME,
         value=token,
@@ -228,34 +259,47 @@ async def admin_login(data: LoginRequest, request: Request):
         max_age=60 * 60 * 24,
         path="/"
     )
+
     return result
 
 
 @app.post("/api/admin/logout")
 async def admin_logout():
-    from fastapi.responses import JSONResponse
 
     result = JSONResponse({"ok": True})
-    result.delete_cookie(COOKIE_NAME, path="/")
+
+    result.delete_cookie(
+        COOKIE_NAME,
+        path="/"
+    )
+
     return result
 
 
 @app.get("/api/admin/me")
 async def admin_me(admin=Depends(require_admin)):
-    return {"ok": True, "username": admin}
+    return {
+        "ok": True,
+        "username": admin
+    }
 
 
-# --------------------------------------------------
+# ==================================================
 # УПРАВЛЕНИЕ ТОВАРАМИ
-# --------------------------------------------------
+# ==================================================
 
 @app.get("/api/admin/products")
 async def admin_get_products(admin=Depends(require_admin)):
+
     products = await supabase_request(
         "GET",
         "products",
-        params={"select": "*", "order": "id.asc"}
+        params={
+            "select": "*",
+            "order": "id.asc"
+        }
     )
+
     return {"products": products or []}
 
 
@@ -264,13 +308,20 @@ async def admin_add_product(
     product: ProductCreate,
     admin=Depends(require_admin)
 ):
+
     created = await supabase_request(
         "POST",
         "products",
         json=product.model_dump(),
-        headers={"Prefer": "return=representation"}
+        headers={
+            "Prefer": "return=representation"
+        }
     )
-    return {"ok": True, "product": created}
+
+    return {
+        "ok": True,
+        "product": created
+    }
 
 
 @app.patch("/api/admin/products/{product_id}")
@@ -279,43 +330,79 @@ async def admin_update_product(
     product: ProductUpdate,
     admin=Depends(require_admin)
 ):
-    changes = product.model_dump(exclude_unset=True)
+
+    changes = product.model_dump(
+        exclude_unset=True
+    )
 
     if not changes:
-        raise HTTPException(status_code=400, detail="Нет изменений.")
+        raise HTTPException(
+            status_code=400,
+            detail="Нет изменений."
+        )
 
     updated = await supabase_request(
         "PATCH",
         "products",
-        params={"id": f"eq.{product_id}"},
+        params={
+            "id": f"eq.{product_id}"
+        },
         json=changes,
-        headers={"Prefer": "return=representation"}
+        headers={
+            "Prefer": "return=representation"
+        }
     )
 
-    return {"ok": True, "product": updated}
+    if not updated:
+        raise HTTPException(
+            status_code=404,
+            detail="Товар не найден."
+        )
 
+    return {
+        "ok": True,
+        "product": updated[0]
+    }
+
+
+# СКРЫТЬ / ПОКАЗАТЬ ТОВАР
 
 @app.delete("/api/admin/products/{product_id}")
 async def admin_delete_product(
     product_id: int,
     admin=Depends(require_admin)
 ):
-    # Не удаляем запись навсегда, а скрываем товар.
-    await supabase_request(
+
+    updated = await supabase_request(
         "PATCH",
         "products",
-        params={"id": f"eq.{product_id}"},
-        json={"active": False}
+        params={
+            "id": f"eq.{product_id}"
+        },
+        json={
+            "active": False
+        },
+        headers={
+            "Prefer": "return=representation"
+        }
     )
+
+    if not updated:
+        raise HTTPException(
+            status_code=404,
+            detail="Товар не найден."
+        )
+
     return {"ok": True}
 
 
-# --------------------------------------------------
+# ==================================================
 # ИСТОРИЯ ЗАКАЗОВ
-# --------------------------------------------------
+# ==================================================
 
 @app.get("/api/admin/orders")
 async def admin_get_orders(admin=Depends(require_admin)):
+
     orders = await supabase_request(
         "GET",
         "orders",
@@ -325,12 +412,13 @@ async def admin_get_orders(admin=Depends(require_admin)):
             "limit": "100"
         }
     )
+
     return {"orders": orders or []}
 
 
-# --------------------------------------------------
+# ==================================================
 # ОФОРМЛЕНИЕ ЗАКАЗА
-# --------------------------------------------------
+# ==================================================
 
 def format_sum(value: int) -> str:
     return f"{value:,}".replace(",", " ") + " сум"
@@ -338,6 +426,7 @@ def format_sum(value: int) -> str:
 
 @app.post("/api/order")
 async def create_order(order: OrderRequest):
+
     name = " ".join(order.customer_name.split())
     phone = " ".join(order.phone.split())
     comment = " ".join(order.comment.split())
@@ -347,6 +436,7 @@ async def create_order(order: OrderRequest):
     saved_items = []
 
     for item in order.items:
+
         rows = await supabase_request(
             "GET",
             "products",
@@ -365,6 +455,7 @@ async def create_order(order: OrderRequest):
             )
 
         product = rows[0]
+
         price = int(product["price"])
         line_total = price * item.quantity
         total += line_total
@@ -376,7 +467,8 @@ async def create_order(order: OrderRequest):
         )
 
         order_lines.append(
-            f"• {product_name} × {item.quantity} — {format_sum(line_total)}"
+            f"• {product_name} × {item.quantity} — "
+            f"{format_sum(line_total)}"
         )
 
         saved_items.append({
@@ -391,7 +483,8 @@ async def create_order(order: OrderRequest):
         ZoneInfo("Asia/Tashkent")
     ).strftime("%d.%m.%Y, %H:%M:%S")
 
-    # Сохраняем заказ в Supabase.
+    # СОХРАНЕНИЕ В SUPABASE
+
     await supabase_request(
         "POST",
         "orders",
@@ -404,8 +497,12 @@ async def create_order(order: OrderRequest):
             "total_price": total,
             "status": "new"
         },
-        headers={"Prefer": "return=minimal"}
+        headers={
+            "Prefer": "return=minimal"
+        }
     )
+
+    # TELEGRAM
 
     message = (
         "🧁 НОВЫЙ ЗАКАЗ — SUMA BAKERY\n\n"
@@ -422,19 +519,28 @@ async def create_order(order: OrderRequest):
     telegram_sent = False
 
     if BOT_TOKEN and CHAT_ID:
+
         telegram_url = (
             f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
         )
 
         try:
             async with httpx.AsyncClient(timeout=20) as client:
+
                 response = await client.post(
                     telegram_url,
-                    json={"chat_id": CHAT_ID, "text": message}
+                    json={
+                        "chat_id": CHAT_ID,
+                        "text": message
+                    }
                 )
 
             result = response.json()
-            telegram_sent = response.is_success and result.get("ok", False)
+
+            telegram_sent = (
+                response.is_success
+                and result.get("ok", False)
+            )
 
         except (httpx.HTTPError, ValueError):
             telegram_sent = False
