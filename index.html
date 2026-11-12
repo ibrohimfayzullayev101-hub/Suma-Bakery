@@ -7,1241 +7,482 @@
 <title>SUMA BAKERY — Искусство десертов</title>
 
 <style>
-  :root {
+:root {
   --bg:#faf6f0;
   --cream:#efe3d5;
   --brown:#75523e;
   --dark:#30241e;
   --muted:#887a70;
 }
-
-* {
-  box-sizing:border-box;
-}
-
-html {
-  scroll-behavior:smooth;
-}
-
-body {
-  margin:0;
-  background:var(--bg);
-  color:var(--dark);
-  font-family:Arial,sans-serif;
-}
-
-button {
-  cursor:pointer;
-  font:inherit;
-}
-
-.container {
-  width:min(1160px,92%);
-  margin:auto;
-}
-
-header {
-  position:sticky;
-  top:0;
-  z-index:10;
-  background:rgba(250,246,240,.94);
-  backdrop-filter:blur(12px);
-  border-bottom:1px solid #eadfd4;
-}
-
-.nav {
-  height:76px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:15px;
-}
-
-.logo {
-  font:30px Georgia,serif;
-  letter-spacing:5px;
-  text-decoration:none;
-  color:var(--dark);
-}
-
-.logo span {
-  display:block;
-  text-align:center;
-  font:10px Arial;
-  letter-spacing:6px;
-}
-
-.nav-links {
-  display:flex;
-  gap:25px;
-}
-
-.nav-links a {
-  text-decoration:none;
-  color:var(--dark);
-  font-size:14px;
-}
-
-.nav-actions {
-  display:flex;
-  gap:10px;
-}
-
-.btn {
-  border:0;
-  background:var(--brown);
-  color:white;
-  border-radius:30px;
-  padding:13px 20px;
-}
-
-.lang {
-  border:1px solid #d8c7b7;
-  background:transparent;
-  border-radius:30px;
-  padding:10px 14px;
-}
-
-.hero {
-  padding:65px 0;
-  background:var(--cream);
-}
-
-.hero-grid {
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  align-items:center;
-  gap:50px;
-}
-
-.eyebrow {
-  color:var(--brown);
-  font-size:12px;
-  letter-spacing:4px;
-}
-
-h1 {
-  font:clamp(42px,6vw,76px)/1.05 Georgia,serif;
-  font-weight:400;
-}
-
-.hero p,.about p {
-  color:var(--muted);
-  line-height:1.9;
-}
-
-.hero img {
-  width:100%;
-  height:460px;
-  object-fit:cover;
-  border-radius:220px 220px 15px 15px;
-}
-
-.hero-buttons {
-  display:flex;
-  gap:15px;
-  align-items:center;
-  margin-top:25px;
-}
-
-section {
-  padding:80px 0;
-}
-
-.section-title {
-  text-align:center;
-  margin-bottom:35px;
-}
-
-.section-title h2 {
-  font:45px Georgia,serif;
-  font-weight:400;
-}
-
-.section-title p {
-  color:var(--muted);
-}
-
-.filters {
-  display:flex;
-  justify-content:center;
-  gap:10px;
-  flex-wrap:wrap;
-  margin-bottom:30px;
-}
-
-.filter {
-  border:1px solid #dfd0c2;
-  background:white;
-  padding:10px 20px;
-  border-radius:30px;
-}
-
-.filter.active {
-  background:var(--brown);
-  color:white;
-}
-
-.products {
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:25px;
-}
-
-.card {
-  background:white;
-  border-radius:18px;
-  overflow:hidden;
-  border:1px solid #eee4db;
-  transition:.25s;
-}
-
-.card:hover {
-  transform:translateY(-5px);
-}
-
-.card img {
-  width:100%;
-  height:250px;
-  object-fit:cover;
-  display:block;
-}
-
-.card-body {
-  padding:20px;
-}
-
-.card h3 {
-  font:25px Georgia,serif;
-  margin:0 0 10px;
-}
-
-.card p {
-  font-size:13px;
-  color:var(--muted);
-  min-height:32px;
-}
-
-.price {
-  font-weight:bold;
-  color:var(--brown);
-  white-space:nowrap;
-}
-
-.card-bottom {
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:10px;
-}
-
-/* Кнопка В КОРЗИНУ */
-
-.add,
-.product-stepper {
-  width:153px;
-  height:63px;
-  border-radius:40px;
-  background:#75523e;
-  color:white;
-  flex-shrink:0;
-}
-
-.add {
-  border:none;
-  font-size:18px;
-  font-weight:500;
-  transition:.2s;
-}
-
-.add:hover {
-  background:#563a2d;
-}
-
-/* Счётчик количества товара */
-
-.product-stepper {
-  display:flex;
-  align-items:center;
-  justify-content:space-evenly;
-}
-
-.product-stepper button {
-  width:36px;
-  height:36px;
-  border:none;
-  border-radius:50%;
-  background:rgba(255,255,255,.16);
-  color:white;
-  font-size:23px;
-  cursor:pointer;
-  transition:.2s;
-}
-
-.product-stepper button:hover {
-  background:rgba(255,255,255,.3);
-}
-
-.product-stepper span {
-  color:white;
-  font-size:19px;
-  font-weight:bold;
-  min-width:20px;
-  text-align:center;
-}
-
-.about {
-  background:var(--cream);
-}
-
-.about-grid {
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  align-items:center;
-  gap:45px;
-}
-
-.about img {
-  width:100%;
-  height:380px;
-  object-fit:cover;
-  border-radius:18px;
-}
-
-.about h2 {
-  font:42px Georgia,serif;
-  font-weight:400;
-}
-
-.contact-box {
-  background:#483429;
-  color:white;
-  text-align:center;
-  padding:55px 20px;
-  border-radius:25px;
-}
-
-.contact-box h2 {
-  font:42px Georgia,serif;
-  font-weight:400;
-}
-
-.contact-box p {
-  color:#e1d1c5;
-}
-
-.contact-box button {
-  background:var(--cream);
-  color:var(--brown);
-}
-
-footer {
-  background:#30241e;
-  color:white;
-  padding:35px 0;
-}
-
-.footer-flex {
-  display:flex;
-  justify-content:space-between;
-  gap:20px;
-  flex-wrap:wrap;
-}
-
-footer p {
-  color:#c9b8aa;
-  font-size:13px;
-}
-
-footer a {
-  color:white;
-}
-
-.modal {
-  position:fixed;
-  inset:0;
-  background:#0008;
-  z-index:30;
-  display:none;
-  align-items:center;
-  justify-content:center;
-  padding:15px;
-}
-
-.modal.show {
-  display:flex;
-}
-
-.modal-content {
-  background:white;
-  width:min(480px,100%);
-  padding:25px;
-  border-radius:20px;
-  max-height:90vh;
-  overflow:auto;
-}
-
-.modal-head {
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-
-.modal-head h2 {
-  font:28px Georgia,serif;
-}
-
-.close {
-  border:0;
-  background:none;
-  font-size:28px;
-}
-
-.cart-item {
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:10px;
-  padding:12px 0;
-  border-bottom:1px solid #eee;
-}
-
-.qty {
-  display:flex;
-  align-items:center;
-  gap:10px;
-}
-
-.qty button {
-  border:1px solid #ddd;
-  background:white;
-  border-radius:50%;
-  width:28px;
-  height:28px;
-}
-
-input,textarea {
-  display:block;
-  width:100%;
-  padding:13px;
-  margin:8px 0 14px;
-  border:1px solid #e1d5ca;
-  border-radius:10px;
-  font:14px Arial;
-}
-
-.total {
-  display:flex;
-  justify-content:space-between;
-  font-weight:bold;
-  margin:20px 0;
-}
-
-.full {
-  width:100%;
-}
-
-.note {
-  font-size:11px;
-  color:var(--muted);
-  line-height:1.6;
-}
-
-@media(max-width:800px) {
-  .hero-grid,.about-grid {
-    grid-template-columns:1fr;
-  }
-
-  .hero img {
-    height:330px;
-  }
-
-  .products {
-    grid-template-columns:repeat(2,1fr);
-  }
-
-  .nav-links {
-    display:none;
-  }
-
-  section {
-    padding:60px 0;
-  }
-}
-
-@media(max-width:500px) {
-  .products {
-    gap:12px;
-  }
-
-  .card img {
-    height:145px;
-  }
-
-  .card-body {
-    padding:12px;
-  }
-
-  .card h3 {
-    font-size:18px;
-  }
-
-  .card p {
-    font-size:11px;
-  }
-
-  .card-bottom {
-    align-items:flex-start;
-    flex-direction:column;
-  }
-
-  .add,.product-stepper {
-    width:100%;
-    max-width:153px;
-    height:50px;
-  }
-
-  .product-stepper button {
-    width:30px;
-    height:30px;
-  }
-
-  .logo {
-    font-size:22px;
-  }
-
-  .hero {
-    padding:45px 0;
-  }
-
-  .hero img {
-    height:290px;
-  }
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--dark);font-family:Arial,sans-serif}
+button{cursor:pointer;font:inherit}
+.container{width:min(1160px,92%);margin:auto}
+header{position:sticky;top:0;z-index:10;background:rgba(250,246,240,.94);backdrop-filter:blur(12px);border-bottom:1px solid #eadfd4}
+.nav{height:76px;display:flex;align-items:center;justify-content:space-between;gap:15px}
+.logo{font:30px Georgia,serif;letter-spacing:5px;text-decoration:none;color:var(--dark)}
+.logo span{display:block;text-align:center;font:10px Arial;letter-spacing:6px}
+.nav-links{display:flex;gap:25px}
+.nav-links a{text-decoration:none;color:var(--dark);font-size:14px}
+.nav-actions{display:flex;gap:10px}
+.btn{border:0;background:var(--brown);color:white;border-radius:30px;padding:13px 20px}
+.lang{border:1px solid #d8c7b7;background:transparent;border-radius:30px;padding:10px 14px}
+.hero{padding:65px 0;background:var(--cream)}
+.hero-grid{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:50px}
+.eyebrow{color:var(--brown);font-size:12px;letter-spacing:4px}
+h1{font:clamp(42px,6vw,76px)/1.05 Georgia,serif;font-weight:400}
+.hero p,.about p{color:var(--muted);line-height:1.9}
+.hero img{width:100%;height:460px;object-fit:cover;border-radius:220px 220px 15px 15px}
+.hero-buttons{display:flex;gap:15px;align-items:center;margin-top:25px}
+section{padding:80px 0}
+.section-title{text-align:center;margin-bottom:35px}
+.section-title h2{font:45px Georgia,serif;font-weight:400}
+.section-title p{color:var(--muted)}
+.filters{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-bottom:30px}
+.filter{border:1px solid #dfd0c2;background:white;padding:10px 20px;border-radius:30px}
+.filter.active{background:var(--brown);color:white}
+.products{display:grid;grid-template-columns:repeat(3,1fr);gap:25px}
+.card{background:white;border-radius:18px;overflow:hidden;border:1px solid #eee4db;transition:.25s}
+.card:hover{transform:translateY(-5px)}
+.card img{width:100%;height:250px;object-fit:cover;display:block;background:#efe3d5}
+.card-body{padding:20px}
+.card h3{font:25px Georgia,serif;margin:0 0 10px}
+.card p{font-size:13px;color:var(--muted);min-height:32px}
+.price{font-weight:bold;color:var(--brown);white-space:nowrap}
+.card-bottom{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.add,.product-stepper{width:153px;height:63px;border-radius:40px;background:#75523e;color:white;flex-shrink:0}
+.add{border:none;font-size:18px;font-weight:500;transition:.2s}
+.add:hover{background:#563a2d}
+.product-stepper{display:flex;align-items:center;justify-content:space-evenly}
+.product-stepper button{width:36px;height:36px;border:none;border-radius:50%;background:rgba(255,255,255,.16);color:white;font-size:23px}
+.product-stepper span{color:white;font-size:19px;font-weight:bold;min-width:20px;text-align:center}
+.about{background:var(--cream)}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:45px}
+.about img{width:100%;height:380px;object-fit:cover;border-radius:18px}
+.about h2{font:42px Georgia,serif;font-weight:400}
+.contact-box{background:#483429;color:white;text-align:center;padding:55px 20px;border-radius:25px}
+.contact-box h2{font:42px Georgia,serif;font-weight:400}
+.contact-box p{color:#e1d1c5}
+.contact-box button{background:var(--cream);color:var(--brown)}
+footer{background:#30241e;color:white;padding:35px 0}
+.footer-flex{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+footer p{color:#c9b8aa;font-size:13px}
+footer a{color:white}
+.modal{position:fixed;inset:0;background:#0008;z-index:30;display:none;align-items:center;justify-content:center;padding:15px}
+.modal.show{display:flex}
+.modal-content{background:white;width:min(480px,100%);padding:25px;border-radius:20px;max-height:90vh;overflow:auto}
+.modal-head{display:flex;justify-content:space-between;align-items:center}
+.modal-head h2{font:28px Georgia,serif}
+.close{border:0;background:none;font-size:28px}
+.cart-item{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid #eee}
+.qty{display:flex;align-items:center;gap:10px}
+.qty button{border:1px solid #ddd;background:white;border-radius:50%;width:28px;height:28px}
+input,textarea{display:block;width:100%;padding:13px;margin:8px 0 14px;border:1px solid #e1d5ca;border-radius:10px;font:14px Arial}
+.total{display:flex;justify-content:space-between;font-weight:bold;margin:20px 0}
+.full{width:100%}
+.note{font-size:11px;color:var(--muted);line-height:1.6}
+.loading,.error-message{grid-column:1/-1;text-align:center;padding:30px;color:var(--muted)}
+@media(max-width:800px){
+.hero-grid,.about-grid{grid-template-columns:1fr}
+.hero img{height:330px}
+.products{grid-template-columns:repeat(2,1fr)}
+.nav-links{display:none}
+section{padding:60px 0}
+}
+@media(max-width:500px){
+.products{gap:12px}
+.card img{height:145px}
+.card-body{padding:12px}
+.card h3{font-size:18px}
+.card p{font-size:11px}
+.card-bottom{align-items:flex-start;flex-direction:column}
+.add,.product-stepper{width:100%;max-width:153px;height:50px}
+.product-stepper button{width:30px;height:30px}
+.logo{font-size:22px}
+.hero{padding:45px 0}
+.hero img{height:290px}
 }
 </style>
 </head>
 
 <body>
-
 <header>
   <div class="container nav">
-
-    <a class="logo" href="#">
-      SUMA
-      <span>BAKERY</span>
-    </a>
-
+    <a class="logo" href="#">SUMA<span>BAKERY</span></a>
     <nav class="nav-links">
       <a href="#menu" data-t="menu">Меню</a>
       <a href="#about" data-t="about">О нас</a>
       <a href="#contact" data-t="contact">Контакты</a>
     </nav>
-
     <div class="nav-actions">
       <button class="lang" onclick="toggleLang()" id="lang">UZ</button>
-
-      <button class="btn" onclick="openCart()">
-        🛒 <span data-t="cart">Корзина</span>
-        <span id="count">0</span>
-      </button>
+      <button class="btn" onclick="openCart()">🛒 <span data-t="cart">Корзина</span> <span id="count">0</span></button>
     </div>
-
   </div>
 </header>
 
 <main>
-
 <section class="hero">
   <div class="container hero-grid">
-
     <div>
-      <div class="eyebrow" data-t="eyebrow">
-        ИСКУССТВО ДЕСЕРТОВ
-      </div>
-
-      <h1 data-t="heroTitle">
-        Маленькие радости в каждом кусочке
-      </h1>
-
-      <p data-t="heroText">
-        Нежные торты, изысканные десерты и сладости,
-        созданные с заботой. Сделайте свой день особенным
-        вместе с SUMA BAKERY.
-      </p>
-
+      <div class="eyebrow" data-t="eyebrow">ИСКУССТВО ДЕСЕРТОВ</div>
+      <h1 data-t="heroTitle">Маленькие радости в каждом кусочке</h1>
+      <p data-t="heroText">Нежные торты, изысканные десерты и сладости, созданные с заботой. Сделайте свой день особенным вместе с SUMA BAKERY.</p>
       <div class="hero-buttons">
-        <a href="#menu">
-          <button class="btn" data-t="view">
-            Смотреть меню
-          </button>
-        </a>
+        <a href="#menu"><button class="btn" data-t="view">Смотреть меню</button></a>
       </div>
     </div>
-
-    <img
-      src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=1000&q=85"
-      alt="Торт"
-    >
-
+    <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=1000&q=85" alt="Торт">
   </div>
 </section>
 
 <section id="menu">
   <div class="container">
-
     <div class="section-title">
-      <div class="eyebrow" data-t="choose">
-        ВЫБЕРИТЕ СВОЁ
-      </div>
-
+      <div class="eyebrow" data-t="choose">ВЫБЕРИТЕ СВОЁ</div>
       <h2 data-t="menuTitle">Наше меню</h2>
-
-      <p data-t="menuText">
-        Любимые вкусы для особенных моментов
-      </p>
+      <p data-t="menuText">Любимые вкусы для особенных моментов</p>
     </div>
-
     <div class="filters">
       <button class="filter active" data-filter="all" data-t="all">Все</button>
       <button class="filter" data-filter="cakes" data-t="cakes">Торты</button>
       <button class="filter" data-filter="desserts" data-t="desserts">Десерты</button>
       <button class="filter" data-filter="cookies" data-t="cookies">Печенье</button>
     </div>
-
-    <div class="products" id="products"></div>
-
+    <div class="products" id="products">
+      <div class="loading">Загружаем меню...</div>
+    </div>
   </div>
 </section>
 
 <section class="about" id="about">
   <div class="container about-grid">
-
-    <img
-      src="https://images.unsplash.com/photo-1559622214-f8a9850965bb?auto=format&fit=crop&w=1000&q=85"
-      alt="Десерты"
-    >
-
+    <img src="https://images.unsplash.com/photo-1559622214-f8a9850965bb?auto=format&fit=crop&w=1000&q=85" alt="Десерты">
     <div>
       <div class="eyebrow" data-t="story">НАША ИСТОРИЯ</div>
-
-      <h2 data-t="aboutTitle">
-        Сладкое — это больше, чем вкус
-      </h2>
-
-      <p data-t="aboutText">
-        Каждый десерт — это маленькая история,
-        созданная с вниманием к деталям.
-        Мы хотим, чтобы каждый кусочек дарил радость.
-      </p>
+      <h2 data-t="aboutTitle">Сладкое — это больше, чем вкус</h2>
+      <p data-t="aboutText">Каждый десерт — это маленькая история, созданная с вниманием к деталям. Мы хотим, чтобы каждый кусочек дарил радость.</p>
     </div>
-
   </div>
 </section>
 
 <section id="contact">
   <div class="container">
-
     <div class="contact-box">
-      <div class="eyebrow" style="color:#e8c9b3" data-t="special">
-        ВАШ ОСОБЕННЫЙ МОМЕНТ
-      </div>
-
+      <div class="eyebrow" style="color:#e8c9b3" data-t="special">ВАШ ОСОБЕННЫЙ МОМЕНТ</div>
       <h2 data-t="ready">Готовы выбрать десерт?</h2>
-
-      <p data-t="contactText">
-        Добавьте любимые сладости в корзину и оформите заказ.
-      </p>
-
-      <button class="btn" onclick="openCart()" data-t="order">
-        Оформить заказ
-      </button>
+      <p data-t="contactText">Добавьте любимые сладости в корзину и оформите заказ.</p>
+      <button class="btn" onclick="openCart()" data-t="order">Оформить заказ</button>
     </div>
-
   </div>
 </section>
-
 </main>
 
 <footer>
   <div class="container footer-flex">
-
+    <div><div class="logo">SUMA BAKERY</div><p>© 2026 SUMA BAKERY</p></div>
     <div>
-      <div class="logo">SUMA BAKERY</div>
-      <p>© 2026 SUMA BAKERY</p>
+      <p>Instagram: <a href="https://instagram.com/suma.bakery" target="_blank">@suma.bakery</a></p>
+      <p data-t="footer">Искусство десертов. Создано с любовью.</p>
     </div>
-
-    <div>
-      <p>
-        Instagram:
-        <a href="https://instagram.com/suma.bakery" target="_blank">
-          @suma.bakery
-        </a>
-      </p>
-
-      <p data-t="footer">
-        Искусство десертов. Создано с любовью.
-      </p>
-    </div>
-
   </div>
 </footer>
 
 <div class="modal" id="modal">
   <div class="modal-content">
-
     <div class="modal-head">
       <h2 data-t="yourOrder">Ваш заказ</h2>
       <button class="close" onclick="closeCart()">×</button>
     </div>
-
     <div id="cartItems"></div>
-
-    <div class="total">
-      <span data-t="total">Итого</span>
-      <span id="total">0 сум</span>
-    </div>
-
+    <div class="total"><span data-t="total">Итого</span><span id="total">0 сум</span></div>
     <label data-t="name">Ваше имя</label>
     <input id="customerName" placeholder="Имя">
-
     <label data-t="phone">Номер телефона</label>
     <input id="phone" placeholder="+998 __ ___ __ __">
-
     <label data-t="comment">Комментарий</label>
     <textarea id="comment" placeholder="Ваш комментарий"></textarea>
-
-    <button class="btn full" onclick="sendOrder()" data-t="send">
-      Отправить заказ в Telegram
-    </button>
-
-    <p class="note" data-t="notice">
-      Цены и ассортимент на сайте демонстрационные.
-      Перед публикацией замените их на реальные.
-    </p>
-
+    <button class="btn full" onclick="sendOrder()" data-t="send">Отправить заказ в Telegram</button>
+    <p class="note" data-t="notice">Цены и ассортимент на сайте демонстрационные.</p>
   </div>
 </div>
 
 <script>
-  /* ТОВАРЫ */
+const FALLBACK_IMAGE = "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=700&q=80";
 
-let products = [
-
-  {
-    id:1,
-    cat:"cakes",
-    price:180000,
-    img:"https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=700&q=80",
-    ru:"Клубничный торт",
-    uz:"Qulupnayli tort",
-    desc:"Нежный крем и клубника"
-  },
-
-  {
-    id:2,
-    cat:"cakes",
-    price:220000,
-    img:"https://images.unsplash.com/photo-1565958011703-44f9829ba187?auto=format&fit=crop&w=700&q=80",
-    ru:"Ягодный чизкейк",
-    uz:"Rezavorli chizkeyk",
-    desc:"Сливочная текстура и ягоды"
-  },
-
-  {
-    id:3,
-    cat:"desserts",
-    price:35000,
-    img:"https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&w=700&q=80",
-    ru:"Тирамису",
-    uz:"Tiramisu",
-    desc:"Кофейный десерт"
-  },
-
-  {
-    id:4,
-    cat:"desserts",
-    price:45000,
-    img:"https://images.unsplash.com/photo-1551024506-0bc0b4a9a4b5?auto=format&fit=crop&w=700&q=80",
-    ru:"Эклеры",
-    uz:"Eklerlar",
-    desc:"Заварное тесто и крем"
-  },
-
-  {
-    id:5,
-    cat:"cookies",
-    price:25000,
-    img:"https://images.unsplash.com/photo-1499636136210-6f4ee915583e?auto=format&fit=crop&w=700&q=80",
-    ru:"Домашнее печенье",
-    uz:"Uy pechenyesi",
-    desc:"Хрустящее и ароматное"
-  },
-
-  {
-    id:6,
-    cat:"cookies",
-    price:30000,
-    img:"https://images.unsplash.com/photo-1558961363-fa8fdf82db35?auto=format&fit=crop&w=700&q=80",
-    ru:"Шоколадное печенье",
-    uz:"Shokoladli pechenye",
-    desc:"С кусочками шоколада"
-  }
-
-];
-
-
-/* ПЕРЕВОД */
-
-const words = {
-
-  ru:{
-    menu:"Меню",
-    about:"О нас",
-    contact:"Контакты",
-    cart:"Корзина",
-    eyebrow:"ИСКУССТВО ДЕСЕРТОВ",
-    heroTitle:"Маленькие радости в каждом кусочке",
-    heroText:"Нежные торты, изысканные десерты и сладости, созданные с заботой. Сделайте свой день особенным вместе с SUMA BAKERY.",
-    view:"Смотреть меню",
-    choose:"ВЫБЕРИТЕ СВОЁ",
-    menuTitle:"Наше меню",
-    menuText:"Любимые вкусы для особенных моментов",
-    all:"Все",
-    cakes:"Торты",
-    desserts:"Десерты",
-    cookies:"Печенье",
-    story:"НАША ИСТОРИЯ",
-    aboutTitle:"Сладкое — это больше, чем вкус",
-    aboutText:"Каждый десерт — это маленькая история, созданная с вниманием к деталям. Мы хотим, чтобы каждый кусочек дарил радость.",
-    special:"ВАШ ОСОБЕННЫЙ МОМЕНТ",
-    ready:"Готовы выбрать десерт?",
-    contactText:"Добавьте любимые сладости в корзину и оформите заказ.",
-    order:"Оформить заказ",
-    footer:"Искусство десертов. Создано с любовью.",
-    yourOrder:"Ваш заказ",
-    total:"Итого",
-    name:"Ваше имя",
-    phone:"Номер телефона",
-    comment:"Комментарий",
-    send:"Отправить заказ в Telegram",
-    notice:"Цены и ассортимент на сайте демонстрационные. Перед публикацией замените их на реальные.",
-    add:"В корзину",
-    empty:"Корзина пуста"
-  },
-
-  uz:{
-    menu:"Menyu",
-    about:"Biz haqimizda",
-    contact:"Aloqa",
-    cart:"Savat",
-    eyebrow:"SHIRINLIKLAR SAN’ATI",
-    heroTitle:"Har bir bo‘lakda kichik quvonch",
-    heroText:"Mehr bilan tayyorlangan nafis tortlar va shirinliklar. Kuningizni SUMA BAKERY bilan o‘zgacha qiling.",
-    view:"Menyuni ko‘rish",
-    choose:"O‘ZINGIZGA YOQQANINI TANLANG",
-    menuTitle:"Bizning menyu",
-    menuText:"Maxsus lahzalar uchun sevimli ta’mlar",
-    all:"Barchasi",
-    cakes:"Tortlar",
-    desserts:"Desertlar",
-    cookies:"Pechenyelar",
-    story:"BIZNING TARIXIMIZ",
-    aboutTitle:"Shirinlik — bu shunchaki ta’m emas",
-    aboutText:"Har bir desert — detallarga e’tibor bilan yaratilgan kichik hikoya. Har bir bo‘lak sizga quvonch ulashishini istaymiz.",
-    special:"SIZNING MAXSUS LAHZANGIZ",
-    ready:"Desert tanlashga tayyormisiz?",
-    contactText:"Sevimli shirinliklaringizni savatga qo‘shing va buyurtma bering.",
-    order:"Buyurtma berish",
-    footer:"Shirinliklar san’ati. Mehr bilan tayyorlangan.",
-    yourOrder:"Buyurtmangiz",
-    total:"Jami",
-    name:"Ismingiz",
-    phone:"Telefon raqamingiz",
-    comment:"Izoh",
-    send:"Telegram orqali buyurtma berish",
-    notice:"Saytdagi narxlar va mahsulotlar namuna uchun. Nashrdan oldin haqiqiy ma’lumotlar bilan almashtiring.",
-    add:"Savatga",
-    empty:"Savat bo‘sh"
-  }
-
-};
-
-
-/* ОСНОВНЫЕ ДАННЫЕ */
-
+let products = [];
 let lang = "ru";
 let cart = {};
 let filter = "all";
 
-const money = n =>
-  new Intl.NumberFormat("ru-RU").format(n) + " сум";
-
-function tr(key) {
-  return words[lang][key] || key;
+const words = {
+ru:{
+menu:"Меню",about:"О нас",contact:"Контакты",cart:"Корзина",
+eyebrow:"ИСКУССТВО ДЕСЕРТОВ",heroTitle:"Маленькие радости в каждом кусочке",
+heroText:"Нежные торты, изысканные десерты и сладости, созданные с заботой. Сделайте свой день особенным вместе с SUMA BAKERY.",
+view:"Смотреть меню",choose:"ВЫБЕРИТЕ СВОЁ",menuTitle:"Наше меню",
+menuText:"Любимые вкусы для особенных моментов",all:"Все",cakes:"Торты",
+desserts:"Десерты",cookies:"Печенье",story:"НАША ИСТОРИЯ",
+aboutTitle:"Сладкое — это больше, чем вкус",
+aboutText:"Каждый десерт — это маленькая история, созданная с вниманием к деталям. Мы хотим, чтобы каждый кусочек дарил радость.",
+special:"ВАШ ОСОБЕННЫЙ МОМЕНТ",ready:"Готовы выбрать десерт?",
+contactText:"Добавьте любимые сладости в корзину и оформите заказ.",
+order:"Оформить заказ",footer:"Искусство десертов. Создано с любовью.",
+yourOrder:"Ваш заказ",total:"Итого",name:"Ваше имя",phone:"Номер телефона",
+comment:"Комментарий",send:"Отправить заказ в Telegram",
+notice:"Цены и ассортимент на сайте демонстрационные.",
+add:"В корзину",empty:"Корзина пуста",loading:"Загружаем меню...",
+loadError:"Не удалось загрузить меню. Попробуйте обновить страницу."
+},
+uz:{
+menu:"Menyu",about:"Biz haqimizda",contact:"Aloqa",cart:"Savat",
+eyebrow:"SHIRINLIKLAR SAN’ATI",heroTitle:"Har bir bo‘lakda kichik quvonch",
+heroText:"Mehr bilan tayyorlangan nafis tortlar va shirinliklar. Kuningizni SUMA BAKERY bilan o‘zgacha qiling.",
+view:"Menyuni ko‘rish",choose:"O‘ZINGIZGA YOQQANINI TANLANG",
+menuTitle:"Bizning menyu",menuText:"Maxsus lahzalar uchun sevimli ta’mlar",
+all:"Barchasi",cakes:"Tortlar",desserts:"Desertlar",cookies:"Pechenyelar",
+story:"BIZNING TARIXIMIZ",aboutTitle:"Shirinlik — bu shunchaki ta’m emas",
+aboutText:"Har bir desert — detallarga e’tibor bilan yaratilgan kichik hikoya.",
+special:"SIZNING MAXSUS LAHZANGIZ",ready:"Desert tanlashga tayyormisiz?",
+contactText:"Sevimli shirinliklaringizni savatga qo‘shing va buyurtma bering.",
+order:"Buyurtma berish",footer:"Shirinliklar san’ati. Mehr bilan tayyorlangan.",
+yourOrder:"Buyurtmangiz",total:"Jami",name:"Ismingiz",phone:"Telefon raqamingiz",
+comment:"Izoh",send:"Telegram orqali buyurtma berish",
+notice:"Saytdagi narxlar va mahsulotlar namuna uchun.",
+add:"Savatga",empty:"Savat bo‘sh",loading:"Menyu yuklanmoqda...",
+loadError:"Menyuni yuklab bo‘lmadi. Sahifani yangilang."
 }
+};
 
+const money = n => new Intl.NumberFormat("ru-RU").format(n) + " сум";
+const tr = key => words[lang][key] || key;
 
-/* ОТРИСОВКА КАРТОЧЕК */
+function safeImage(url) {
+  if (!url || typeof url !== "string") return FALLBACK_IMAGE;
+  try {
+    const parsed = new URL(url);
+    if (parsed.protocol !== "https:" && parsed.protocol !== "http:") {
+      return FALLBACK_IMAGE;
+    }
+    return url;
+  } catch {
+    return FALLBACK_IMAGE;
+  }
+}
 
 function render() {
+  const container = document.getElementById("products");
+  const visible = products.filter(p => filter === "all" || p.cat === filter);
 
-  const productsContainer =
-    document.getElementById("products");
-
-  productsContainer.innerHTML = products
-
-    .filter(p => filter === "all" || p.cat === filter)
-
-    .map(p => {
-
-      const quantity = cart[p.id] || 0;
-
-      const button = quantity === 0
-
-        ? `
-          <button class="add" onclick="add(${p.id})">
-            ${tr("add")}
-          </button>
-        `
-
-        : `
-          <div class="product-stepper">
-
-            <button onclick="qty(${p.id}, -1)">−</button>
-
-            <span>${quantity}</span>
-
-            <button onclick="qty(${p.id}, 1)">+</button>
-
-          </div>
-        `;
-
-      return `
-
-        <article class="card">
-
-          <img src="${p.img}" alt="${p[lang]}" loading="lazy">
-
-          <div class="card-body">
-
-            <h3>${p[lang]}</h3>
-
-            <p>${p.desc}</p>
-
-            <div class="card-bottom">
-
-              <span class="price">
-                ${money(p.price)}
-              </span>
-
-              ${button}
-
-            </div>
-
-          </div>
-
-        </article>
-
-      `;
-
-    }).join("");
-
-}
-
-
-async function loadProductsFromServer() {
-    try {
-        const response = await fetch("/api/products");
-
-        if (!response.ok) {
-            throw new Error("Не удалось загрузить каталог");
-        }
-
-        const data = await response.json();
-
-        products = (data.products || []).map(product => ({
-            id: product.id,
-            ru: product.name_ru,
-            uz: product.name_uz,
-            cat: product.category,
-            price: product.price,
-            img: product.image_url || "",
-            desc: product.description_ru || ""
-        }));
-
-        render();
-
-    } catch (error) {
-        console.error("Ошибка каталога:", error);
-    }
-}
-
-loadProductsFromServer();
-
-
-
-/* ДОБАВИТЬ ТОВАР */
-
-function add(id) {
-
-  cart[id] = (cart[id] || 0) + 1;
-
-  render();
-  updateCart();
-
-}
-
-
-/* УВЕЛИЧИТЬ ИЛИ УМЕНЬШИТЬ */
-
-function qty(id, amount) {
-
-  cart[id] = (cart[id] || 0) + amount;
-
-  if (cart[id] <= 0) {
-    delete cart[id];
+  if (!visible.length) {
+    container.innerHTML = `<div class="loading">${tr("loadError")}</div>`;
+    return;
   }
 
-  render();
-  updateCart();
+  container.innerHTML = visible.map(p => {
+    const quantity = cart[p.id] || 0;
+    const button = quantity === 0
+      ? `<button class="add" onclick="add(${Number(p.id)})">${tr("add")}</button>`
+      : `<div class="product-stepper">
+          <button onclick="qty(${Number(p.id)},-1)">−</button>
+          <span>${quantity}</span>
+          <button onclick="qty(${Number(p.id)},1)">+</button>
+        </div>`;
 
+    const image = safeImage(p.img);
+    const title = p[lang] || p.ru || "SUMA BAKERY";
+
+    return `<article class="card">
+      <img src="${image}" alt="${title}" loading="lazy"
+        onerror="this.onerror=null;this.src='${FALLBACK_IMAGE}'">
+      <div class="card-body">
+        <h3>${title}</h3>
+        <p>${p.desc || ""}</p>
+        <div class="card-bottom">
+          <span class="price">${money(p.price)}</span>
+          ${button}
+        </div>
+      </div>
+    </article>`;
+  }).join("");
 }
 
+async function loadProductsFromServer() {
+  const container = document.getElementById("products");
+  container.innerHTML = `<div class="loading">${tr("loading")}</div>`;
 
-/* ОБНОВЛЕНИЕ КОРЗИНЫ */
+  try {
+    const response = await fetch("/api/products", {cache:"no-store"});
+    if (!response.ok) throw new Error("HTTP " + response.status);
+
+    const data = await response.json();
+
+    products = (data.products || []).map(product => ({
+      id:product.id,
+      ru:product.name_ru,
+      uz:product.name_uz,
+      cat:product.category,
+      price:Number(product.price),
+      img:safeImage(product.image_url),
+      desc:lang === "ru"
+        ? (product.description_ru || "")
+        : (product.description_uz || product.description_ru || "")
+    }));
+
+    render();
+    updateCart();
+  } catch(error) {
+    console.error("Ошибка загрузки каталога:", error);
+    container.innerHTML = `<div class="error-message">${tr("loadError")}<br><small>${error.message}</small></div>`;
+  }
+}
+
+function add(id) {
+  cart[id] = (cart[id] || 0) + 1;
+  render();
+  updateCart();
+}
+
+function qty(id, amount) {
+  cart[id] = (cart[id] || 0) + amount;
+  if (cart[id] <= 0) delete cart[id];
+  render();
+  updateCart();
+}
 
 function updateCart() {
-
-  const count = Object.values(cart)
-    .reduce((a,b) => a + b, 0);
-
+  const count = Object.values(cart).reduce((a,b) => a+b, 0);
   document.getElementById("count").textContent = count;
 
   const ids = Object.keys(cart);
-
   const cartItems = document.getElementById("cartItems");
 
-  if (ids.length === 0) {
-
+  if (!ids.length) {
     cartItems.innerHTML = `<p>${tr("empty")}</p>`;
-
   } else {
-
     cartItems.innerHTML = ids.map(id => {
-
       const p = products.find(x => x.id == id);
-
-      return `
-
-        <div class="cart-item">
-
-          <span>
-            ${p[lang]}
-            <br>
-            ${money(p.price)} × ${cart[id]}
-          </span>
-
-          <div class="qty">
-
-            <button onclick="qty(${id},-1)">−</button>
-
-            ${cart[id]}
-
-            <button onclick="qty(${id},1)">+</button>
-
-          </div>
-
+      if (!p) return "";
+      return `<div class="cart-item">
+        <span>${p[lang] || p.ru}<br>${money(p.price)} × ${cart[id]}</span>
+        <div class="qty">
+          <button onclick="qty(${Number(id)},-1)">−</button>
+          ${cart[id]}
+          <button onclick="qty(${Number(id)},1)">+</button>
         </div>
-
-      `;
-
+      </div>`;
     }).join("");
-
   }
 
   const sum = ids.reduce((total,id) => {
-
-    const product = products.find(p => p.id == id);
-
-    return total + product.price * cart[id];
-
+    const p = products.find(x => x.id == id);
+    return total + (p ? p.price * cart[id] : 0);
   },0);
 
   document.getElementById("total").textContent = money(sum);
-
 }
-
-
-/* ОТКРЫТЬ КОРЗИНУ */
 
 function openCart() {
-
   document.getElementById("modal").classList.add("show");
-
   updateCart();
-
 }
-
-
-/* ЗАКРЫТЬ КОРЗИНУ */
 
 function closeCart() {
-
   document.getElementById("modal").classList.remove("show");
-
 }
 
-
-/* СМЕНА ЯЗЫКА */
-
 function toggleLang() {
-
   lang = lang === "ru" ? "uz" : "ru";
-
   document.documentElement.lang = lang;
-
-  document.getElementById("lang").textContent =
-    lang === "ru" ? "UZ" : "RU";
+  document.getElementById("lang").textContent = lang === "ru" ? "UZ" : "RU";
 
   document.querySelectorAll("[data-t]").forEach(el => {
-
     el.textContent = tr(el.dataset.t);
-
   });
 
   document.querySelectorAll(".filter").forEach(button => {
-
     button.textContent = tr(button.dataset.t);
-
   });
 
   render();
   updateCart();
-
 }
-
-
-/* ФИЛЬТРЫ */
 
 document.querySelectorAll(".filter").forEach(button => {
-
   button.onclick = () => {
-
     filter = button.dataset.filter;
-
     document.querySelectorAll(".filter").forEach(item => {
-
       item.classList.toggle("active", item === button);
-
     });
-
     render();
-
   };
-
 });
 
-
-/* ОФОРМЛЕНИЕ ЗАКАЗА */
-
-
 async function sendOrder() {
-    const ids = Object.keys(cart);
+  const ids = Object.keys(cart);
+  if (!ids.length) return alert(tr("empty"));
 
-    if (!ids.length) {
-        alert(tr("empty"));
-        return;
-    }
+  const name = document.getElementById("customerName").value.trim();
+  const phone = document.getElementById("phone").value.trim();
+  const comment = document.getElementById("comment").value.trim();
 
-    const name = document.getElementById("customerName").value.trim();
-    const phone = document.getElementById("phone").value.trim();
-    const comment = document.getElementById("comment").value.trim();
+  if (!name || !phone) return alert("Введите имя и номер телефона");
 
-    if (!name || !phone) {
-        alert("Введите имя и номер телефона");
-        return;
-    }
+  const button = document.querySelector(".modal-content .btn.full");
+  const oldText = button.textContent;
+  button.disabled = true;
+  button.textContent = "Отправляем...";
 
-    const button = document.querySelector(".modal-content .btn.full");
-    const oldText = button.textContent;
+  try {
+    const response = await fetch("/api/order", {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        customer_name:name,
+        phone,
+        comment,
+        language:lang,
+        items:ids.map(id => ({
+          product_id:Number(id),
+          quantity:cart[id]
+        }))
+      })
+    });
 
-    button.disabled = true;
-    button.textContent = "Отправляем...";
+    const raw = await response.text();
+    if (!raw.trim()) throw new Error(`Пустой ответ. HTTP ${response.status}`);
 
+    let result;
     try {
-        const response = await fetch("/api/order", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                customer_name: name,
-                phone: phone,
-                comment: comment,
-                language: lang,
-                items: ids.map(id => ({
-                    product_id: Number(id),
-                    quantity: cart[id]
-                }))
-            })
-        });
-
-        // Сначала читаем обычный текст, а затем проверяем JSON.
-        const raw = await response.text();
-
-        if (!raw.trim()) {
-            throw new Error(
-                `Сервер вернул пустой ответ. HTTP ${response.status}`
-            );
-        }
-
-        let result;
-
-        try {
-            result = JSON.parse(raw);
-        } catch {
-            throw new Error(
-                "Сервер вернул не JSON: " + raw.slice(0, 200)
-            );
-        }
-
-        if (!response.ok) {
-            throw new Error(result.detail || "Ошибка сервера");
-        }
-
-        if (!result.ok) {
-            throw new Error("Заказ не подтверждён сервером");
-        }
-
-        alert("Заказ успешно отправлен в Telegram!");
-
-        cart = {};
-
-        document.getElementById("customerName").value = "";
-        document.getElementById("phone").value = "";
-        document.getElementById("comment").value = "";
-
-        render();
-        updateCart();
-        closeCart();
-
-    } catch (error) {
-        alert("Ошибка: " + error.message);
-        console.error(error);
-    } finally {
-        button.disabled = false;
-        button.textContent = oldText;
+      result = JSON.parse(raw);
+    } catch {
+      throw new Error("Сервер вернул не JSON: " + raw.slice(0,150));
     }
+
+    if (!response.ok) throw new Error(result.detail || "Ошибка сервера");
+    if (!result.ok) throw new Error("Заказ не подтверждён сервером");
+
+    alert("Заказ успешно отправлен!");
+    cart = {};
+    document.getElementById("customerName").value = "";
+    document.getElementById("phone").value = "";
+    document.getElementById("comment").value = "";
+    render();
+    updateCart();
+    closeCart();
+  } catch(error) {
+    alert("Ошибка: " + error.message);
+    console.error(error);
+  } finally {
+    button.disabled = false;
+    button.textContent = oldText;
+  }
 }
-
-
-
-
-/* ЗАПУСК */
 
 render();
 updateCart();
-
+loadProductsFromServer();
 </script>
 </body>
 </html>
