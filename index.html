@@ -308,35 +308,53 @@ function render() {
   }).join("");
 }
 
+
+    
 async function loadProductsFromServer() {
-  const container = document.getElementById("products");
-  container.innerHTML = `<div class="loading">${tr("loading")}</div>`;
+    try {
+        const response = await fetch("/api/products", {
+            cache: "no-store"
+        });
 
-  try {
-    const response = await fetch("/api/products", {cache:"no-store"});
-    if (!response.ok) throw new Error("HTTP " + response.status);
+        if (!response.ok) {
+            throw new Error("Ошибка загрузки товаров: " + response.status);
+        }
 
-    const data = await response.json();
+        const data = await response.json();
 
-    products = (data.products || []).map(product => ({
-      id:product.id,
-      ru:product.name_ru,
-      uz:product.name_uz,
-      cat:product.category,
-      price:Number(product.price),
-      img:safeImage(product.image_url),
-      desc:lang === "ru"
-        ? (product.description_ru || "")
-        : (product.description_uz || product.description_ru || "")
-    }));
+        const serverProducts = data.products || [];
 
-    render();
-    updateCart();
-  } catch(error) {
-    console.error("Ошибка загрузки каталога:", error);
-    container.innerHTML = `<div class="error-message">${tr("loadError")}<br><small>${error.message}</small></div>`;
-  }
+        products = serverProducts.map(product => {
+            // Ищем первоначальную карточку с фотографией
+            const oldProduct = products.find(
+                item => String(item.id) === String(product.id)
+            );
+
+            return {
+                id: product.id,
+                ru: product.name_ru || oldProduct?.ru || "Десерт",
+                uz: product.name_uz || oldProduct?.uz || "Desert",
+                cat: product.category || oldProduct?.cat || "desserts",
+                price: Number(product.price),
+                img: product.image_url?.trim()
+                    ? product.image_url.trim()
+                    : (oldProduct?.img || FALLBACK_IMAGE),
+                desc: product.description_ru || oldProduct?.desc || ""
+            };
+        });
+
+        render();
+        updateCart();
+
+    } catch (error) {
+        console.error("Ошибка каталога:", error);
+
+        // Не удаляем первоначальные товары при ошибке Supabase
+        render();
+        updateCart();
+    }
 }
+
 
 function add(id) {
   cart[id] = (cart[id] || 0) + 1;
